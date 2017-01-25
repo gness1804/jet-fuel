@@ -44,13 +44,21 @@ function fetchDisplay() {
         let folderTitles = Object.keys(response);
         let folders = response[folderTitles];
 
-        $.each(response, function(key, value) {
-          console.log(Object.keys(value))
-          console.log('folderTitle', value.folderTitle)
-          console.log('urls', value.urls)
-          let urls = value.urls;
-          $('#folders-list').append(`<li class='folder-li'>` + key + `</li>` +
-          `<li>` + urls + `</li>`)
+        $.each(response, function(folderTitle, value) {
+          // console.log(Object.keys(value))
+          // console.log('folderTitle', value.folderTitle)
+          var folderTitle = $(`<li class='folder-li'>` + folderTitle + `</li>`)
+          $('#folders-list').append(folderTitle)
+          // console.log('urlssss', value.urls)
+          let urls = value.urls.map((url) => {
+            $.each(url, function(a, b) {
+              // console.log('key:', a, 'value:', b)
+              if(a==='longURL'){
+                console.log('val', b)
+                folderTitle.append(b)
+              }
+            })
+          });
         })
       }
     }
