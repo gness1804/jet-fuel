@@ -40,20 +40,26 @@ function fetchDisplay() {
     if(hitAPI.readyState === XMLHttpRequest.DONE) {
       if (hitAPI.status === 200) {
         let response = JSON.parse(hitAPI.responseText)
+
         let folderTitles = Object.keys(response);
-        // let urls = response[folderTitles].urls;
-        let folders = response[folderTitles]
-        console.log('folders', folders)
-        console.log('folderNames', folderTitles)
-        // console.log('urlArray', urls)
-        folderTitles.forEach((folder) => {
-          console.log('folder', folder)
-          $('#folders-list').append(`<li class='folder-li'>` + folder + `</li>`)
+        let folders = response[folderTitles];
+
+        $.each(response, function(key, value) {
+          console.log(Object.keys(value))
+          console.log('folderTitle', value.folderTitle)
+          console.log('urls', value.urls)
+          let urls = value.urls;
+          $('#folders-list').append(`<li class='folder-li'>` + key + `</li>` +
+          `<li>` + urls + `</li>`)
         })
       }
     }
   }
 }
+
+// displayFolders() {
+//   console.log('display')
+// }
 
 
 
