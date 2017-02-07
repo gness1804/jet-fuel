@@ -55,7 +55,7 @@ const showURLs = (folderTitle) => {
           const createdAt = url.created_at.slice(0,10);
           $('#section-title').html(`<h2>Selected Folder: ${url.parentFolder}</h2>`);
           $('#main-folder-display').append(`
-            <div>
+            <div class="url-container">
             <p id="${url.id}"
             class="${url.parentFolder}
             clickable-link"
