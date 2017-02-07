@@ -48,6 +48,7 @@ const showURLs = (folderTitle) => {
     if (hitAPI.readyState === XMLHttpRequest.DONE) {
       if (hitAPI.status === 200) {
         let result = JSON.parse(hitAPI.responseText);
+        $('#back-button').html(`<button onClick="showFolders()">Go Back</button>`);
         let urls = result.map((url) => {
           const longURL = url.longURL;
           const urlID = url.id;
@@ -227,3 +228,7 @@ $('#create-folder-button').on('click', () => {
  setTimeout(showFolders, 300);
  showFolders();
 })
+
+$('#back-button').on('click', () => {
+
+});
