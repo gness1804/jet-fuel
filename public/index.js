@@ -3,7 +3,6 @@ let url = $('#bookmark-url-input');
 let folder = $('#bookmark-folder-input');
 let newFolder = $('#new-folder-input');
 
-
 const showFolders = () => {
   document.querySelector('#main-folder-display').innerHTML = '';
   var hitAPI = new XMLHttpRequest();
@@ -133,7 +132,7 @@ const increaseClickCount = (longURL, urlID, folderTitle) => {
 }
 
 const goToRealURL = (longURL, urlID, folderTitle) => {
-  var windowObjectReference;
+  let windowObjectReference;
     windowObjectReference = window.open(`${longURL}`)
   increaseClickCount(longURL, urlID, folderTitle);
 }
@@ -141,10 +140,17 @@ const goToRealURL = (longURL, urlID, folderTitle) => {
 showFolders();
 
 const saveURL = () => {
+  let longURL = $('#bookmark-url-input').val();
+  let parentFolder = $('#bookmark-folder-input').val();
+  let validation = /http(s?):\/\/+/;
+  if (!longURL.match(validation)) {
+    alert('Please enter in a valid URL containing http:// or https://.');
+    return;
+  }
   let folderTitle = $('#bookmark-folder-input').val();
   axios.post('/api/folders/${folderTitle}/urls', {
-    longURL: $('#bookmark-url-input').val(),
-    parentFolder: $('#bookmark-folder-input').val(),
+    longURL,
+    parentFolder,
     folder_id: 1167,
     clickCount: 0,
     requestType: 'bookmark-update',
