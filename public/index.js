@@ -49,6 +49,9 @@ const showURLs = (folderTitle) => {
       if (hitAPI.status === 200) {
         let result = JSON.parse(hitAPI.responseText);
         $('#back-button').html(`<button onClick="showFolders()">Go Back</button>`);
+        $('#main-folder-display').append(`
+          <button onClick="sortByPopularity('ascending', '${folderTitle}')">Sort by Popularity--Ascending</button>
+        `);
         let urls = result.map((url) => {
           const longURL = url.longURL;
           const urlID = url.id;
@@ -129,6 +132,7 @@ const saveFolder = () => {
 }
 
 const sortByPopularity = (direction, folderTitle) => {
+  console.log(folderTitle);
   document.querySelector('#main-folder-display').innerHTML = '';
   $('#main-folder-display').append(`
     <h3>
@@ -228,7 +232,3 @@ $('#create-folder-button').on('click', () => {
  setTimeout(showFolders, 300);
  showFolders();
 })
-
-$('#back-button').on('click', () => {
-
-});
