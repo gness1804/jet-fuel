@@ -28,7 +28,7 @@ const showFolders = () => {
           document.querySelector('#bookmark-folder-input').appendChild(opt);
           $('#main-folder-display').append(`
             <div>
-            <h3 onClick="mainDisplay('${result[i].folderTitle}')">${result[i].folderTitle}
+            <h3 onClick="showURLs('${result[i].folderTitle}')">${result[i].folderTitle}
             </div>
             `);
         }
@@ -37,10 +37,6 @@ const showFolders = () => {
       }
     }
   }
-}
-
-const mainDisplay = (folderTitle) => {
-  showURLs(folderTitle);
 }
 
 const showURLs = (folderTitle) => {
