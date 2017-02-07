@@ -40,58 +40,7 @@ const showFolders = () => {
 }
 
 const mainDisplay = (folderTitle) => {
-  showOneFolder(folderTitle);
   showURLs(folderTitle);
-}
-
-const showOneFolder = (folderTitle) => {
-  document.querySelector('#main-folder-display').innerHTML = '';
-  var hitAPI = new XMLHttpRequest();
-  hitAPI.open('GET', `/api/folders/${folderTitle}`, true);
-  hitAPI.send();
-  hitAPI.onreadystatechange = function() {
-    if (hitAPI.readyState === XMLHttpRequest.DONE) {
-      if (hitAPI.status === 200) {
-        let result = JSON.parse(hitAPI.responseText);
-        $('#main-folder-display').append(`
-          <div>
-          <h2 onClick="showURLs('${result[0].folderTitle}')">${result[0].folderTitle}</h2>
-
-          <button
-          id="sort-popularity-ascending"
-          onClick="sortByPopularity('ascending', '${result[0].folderTitle}')"
-          >
-          Sort URLs By Popularity (Ascending)
-          </button>
-
-          <button
-          id="sort-popularity-descending"
-          onClick="sortByPopularity('descending', '${result[0].folderTitle}')"
-          >
-          Sort URLs By Popularity (Descending)
-          </button>
-
-          <button
-          id="sort-date-ascending"
-          onClick="sortByDate('ascending', '${result[0].folderTitle}')"
-          >
-          Sort URLs By Date (Ascending)
-          </button>
-
-          <button
-          id="sort-date-descending"
-          onClick="sortByDate('descending', '${result[0].folderTitle}')"
-          >
-          Sort URLs By Date (Descending)
-          </button>
-
-          </div>
-          `);
-      } else {
-        console.error('There was a problem with the API call.');
-      }
-    }
-  }
 }
 
 const showURLs = (folderTitle) => {
@@ -108,6 +57,7 @@ const showURLs = (folderTitle) => {
           const urlID = url.id;
           const folderTitle = url.parentFolder;
           const createdAt = url.created_at.slice(0,10);
+          $('#section-title').html(`<h2>Selected Folder: ${url.parentFolder}</h2>`);
           $('#main-folder-display').append(`
             <div>
             <p id="${url.id}"
