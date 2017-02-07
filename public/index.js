@@ -12,6 +12,7 @@ const showFolders = () => {
     if (hitAPI.readyState === XMLHttpRequest.DONE) {
       if (hitAPI.status === 200) {
         let result = JSON.parse(hitAPI.responseText);
+        $('#main-folder-display').append(`<h2>Folders:</h2>`);
         document.querySelector('#bookmark-folder-input').innerHTML = '';
 
         let defaultOption = document.createElement('OPTION');
