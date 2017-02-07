@@ -12,10 +12,12 @@
   </head>
   <body>
     <h1> BOOKMARKER </h1>
+    <p id="ephemeral-notification"></p>
     <select id="bookmark-folder-input">
       <option value="" id="default-option-for-dropdown">Folder Name for this Bookmark</option>
     </select>
     <input type="text" placeholder="Bookmark URL" id="bookmark-url-input"/>
+    <p>URL must contain http:// or https://. <br /> Please also remember to select a folder before adding a bookmark.</p>
     <button
     type="submit"
     id="submit-button"
@@ -27,8 +29,11 @@
     <button id="create-folder-button">Create New Folder</button>
     <br></br>
 
-    <section id='main-folder-display'>
+    <div id="back-button"></div>
 
+    <h2 id="section-title"></h2>
+
+    <section id='main-folder-display'>
     </section>
 
     <script src="index.js"></script>

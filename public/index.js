@@ -3,7 +3,6 @@ let url = $('#bookmark-url-input');
 let folder = $('#bookmark-folder-input');
 let newFolder = $('#new-folder-input');
 
-
 const showFolders = () => {
   document.querySelector('#main-folder-display').innerHTML = '';
   var hitAPI = new XMLHttpRequest();
@@ -13,6 +12,7 @@ const showFolders = () => {
     if (hitAPI.readyState === XMLHttpRequest.DONE) {
       if (hitAPI.status === 200) {
         let result = JSON.parse(hitAPI.responseText);
+        $('#section-title').html('<h2>Folders: </h2>');
         document.querySelector('#bookmark-folder-input').innerHTML = '';
 
         let defaultOption = document.createElement('OPTION');
@@ -28,65 +28,10 @@ const showFolders = () => {
           document.querySelector('#bookmark-folder-input').appendChild(opt);
           $('#main-folder-display').append(`
             <div>
-            <h3 onClick="mainDisplay('${result[i].folderTitle}')">${result[i].folderTitle}
+            <h3 onClick="showURLs('${result[i].folderTitle}')">${result[i].folderTitle}
             </div>
             `);
         }
-      } else {
-        console.error('There was a problem with the API call.');
-      }
-    }
-  }
-}
-
-const mainDisplay = (folderTitle) => {
-  showOneFolder(folderTitle);
-  showURLs(folderTitle);
-}
-
-const showOneFolder = (folderTitle) => {
-  document.querySelector('#main-folder-display').innerHTML = '';
-  var hitAPI = new XMLHttpRequest();
-  hitAPI.open('GET', `/api/folders/${folderTitle}`, true);
-  hitAPI.send();
-  hitAPI.onreadystatechange = function() {
-    if (hitAPI.readyState === XMLHttpRequest.DONE) {
-      if (hitAPI.status === 200) {
-        let result = JSON.parse(hitAPI.responseText);
-        $('#main-folder-display').append(`
-          <div>
-          <h2 onClick="showURLs('${result[0].folderTitle}')">${result[0].folderTitle}</h2>
-
-          <button
-          id="sort-popularity-ascending"
-          onClick="sortByPopularity('ascending', '${result[0].folderTitle}')"
-          >
-          Sort URLs By Popularity (Ascending)
-          </button>
-
-          <button
-          id="sort-popularity-descending"
-          onClick="sortByPopularity('descending', '${result[0].folderTitle}')"
-          >
-          Sort URLs By Popularity (Descending)
-          </button>
-
-          <button
-          id="sort-date-ascending"
-          onClick="sortByDate('ascending', '${result[0].folderTitle}')"
-          >
-          Sort URLs By Date (Ascending)
-          </button>
-
-          <button
-          id="sort-date-descending"
-          onClick="sortByDate('descending', '${result[0].folderTitle}')"
-          >
-          Sort URLs By Date (Descending)
-          </button>
-
-          </div>
-          `);
       } else {
         console.error('There was a problem with the API call.');
       }
@@ -103,13 +48,21 @@ const showURLs = (folderTitle) => {
     if (hitAPI.readyState === XMLHttpRequest.DONE) {
       if (hitAPI.status === 200) {
         let result = JSON.parse(hitAPI.responseText);
+        $('#back-button').html(`<button onClick="showFolders()">Back to Folders</button>`);
+        $('#main-folder-display').append(`
+          <button onClick="sortByPopularity('ascending', '${folderTitle}')">Sort by Popularity--Ascending</button>
+          <button onClick="sortByPopularity('descending', '${folderTitle}')">Sort by Popularity--Descending</button>
+          <button onClick="sortByDate('ascending', '${folderTitle}')">Sort by Date--Ascending</button>
+          <button onClick="sortByDate('descending', '${folderTitle}')">Sort by Date--Descending</button>
+        `);
         let urls = result.map((url) => {
           const longURL = url.longURL;
           const urlID = url.id;
           const folderTitle = url.parentFolder;
           const createdAt = url.created_at.slice(0,10);
+          $('#section-title').html(`<h2>Selected Folder: ${url.parentFolder}</h2>`);
           $('#main-folder-display').append(`
-            <div>
+            <div class="url-container">
             <p id="${url.id}"
             class="${url.parentFolder}
             clickable-link"
@@ -133,7 +86,7 @@ const increaseClickCount = (longURL, urlID, folderTitle) => {
 }
 
 const goToRealURL = (longURL, urlID, folderTitle) => {
-  var windowObjectReference;
+  let windowObjectReference;
     windowObjectReference = window.open(`${longURL}`)
   increaseClickCount(longURL, urlID, folderTitle);
 }
@@ -141,24 +94,48 @@ const goToRealURL = (longURL, urlID, folderTitle) => {
 showFolders();
 
 const saveURL = () => {
-  let folderTitle = $('#bookmark-folder-input').val();
+  let longURL = $('#bookmark-url-input').val();
+  let parentFolder = $('#bookmark-folder-input').val();
+  let validation = /http(s?):\/\/+/;
+  if (!longURL.match(validation)) {
+    alert('Please enter in a valid URL containing http:// or https://.');
+    return;
+  }
+  if (parentFolder === 'Folder Name for this Bookmark') {
+    alert('Your entry must include a folder name.');
+    return;
+  }
+  setEphemeralNotification(longURL);
   axios.post('/api/folders/${folderTitle}/urls', {
-    longURL: $('#bookmark-url-input').val(),
-    parentFolder: $('#bookmark-folder-input').val(),
+    longURL,
+    parentFolder,
     folder_id: 1167,
     clickCount: 0,
     requestType: 'bookmark-update',
   })
 }
 
+const setEphemeralNotification = (url) => {
+  $('#ephemeral-notification').text(`You have added the following bookmark: ${url}.`).fadeIn();
+  setTimeout(() => {
+    $('#ephemeral-notification').fadeOut(5000);
+  }, 500);
+}
+
 const saveFolder = () => {
+  let folderTitle = newFolder.val();
+  if (!folderTitle) {
+    alert('You must add a folder name.');
+    return;
+  }
   axios.post('/api/folders', {
-    folderTitle: newFolder.val(),
+    folderTitle,
     requestType: 'folder-update',
   })
 }
 
 const sortByPopularity = (direction, folderTitle) => {
+  console.log(folderTitle);
   document.querySelector('#main-folder-display').innerHTML = '';
   $('#main-folder-display').append(`
     <h3>

@@ -38,6 +38,10 @@ h3:hover {
   color: maroon;
 }
 
-/*h3 {
-  color: white;
-}*/
+#section-title {
+  margin: 30px auto;
+}
+
+.url-container {
+  margin: 30px 0;
+}
