@@ -51,6 +51,9 @@ const showURLs = (folderTitle) => {
         $('#back-button').html(`<button onClick="showFolders()">Go Back</button>`);
         $('#main-folder-display').append(`
           <button onClick="sortByPopularity('ascending', '${folderTitle}')">Sort by Popularity--Ascending</button>
+          <button onClick="sortByPopularity('descending', '${folderTitle}')">Sort by Popularity--Descending</button>
+          <button onClick="sortByDate('ascending', '${folderTitle}')">Sort by Date--Ascending</button>
+          <button onClick="sortByDate('descending', '${folderTitle}')">Sort by Date--Descending</button>
         `);
         let urls = result.map((url) => {
           const longURL = url.longURL;
