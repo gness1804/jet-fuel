@@ -98,7 +98,7 @@ const saveURL = () => {
     alert('Your entry must include a folder name.');
     return;
   }
-  let folderTitle = $('#bookmark-folder-input').val();
+  setEphemeralNotification(longURL);
   axios.post('/api/folders/${folderTitle}/urls', {
     longURL,
     parentFolder,
@@ -106,6 +106,13 @@ const saveURL = () => {
     clickCount: 0,
     requestType: 'bookmark-update',
   })
+}
+
+const setEphemeralNotification = (url) => {
+  $('#ephemeral-notification').text(`You have added the following bookmark: ${url}.`).fadeIn();
+  setTimeout(() => {
+    $('#ephemeral-notification').fadeOut(5000);
+  }, 500);
 }
 
 const saveFolder = () => {
