@@ -147,6 +147,10 @@ const saveURL = () => {
     alert('Please enter in a valid URL containing http:// or https://.');
     return;
   }
+  if (parentFolder === 'Folder Name for this Bookmark') {
+    alert('Your entry must include a folder name.');
+    return;
+  }
   let folderTitle = $('#bookmark-folder-input').val();
   axios.post('/api/folders/${folderTitle}/urls', {
     longURL,
