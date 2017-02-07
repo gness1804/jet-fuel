@@ -162,8 +162,13 @@ const saveURL = () => {
 }
 
 const saveFolder = () => {
+  let folderTitle = newFolder.val();
+  if (!folderTitle) {
+    alert('You must add a folder name.');
+    return;
+  }
   axios.post('/api/folders', {
-    folderTitle: newFolder.val(),
+    folderTitle,
     requestType: 'folder-update',
   })
 }
