@@ -48,7 +48,7 @@ const showURLs = (folderTitle) => {
     if (hitAPI.readyState === XMLHttpRequest.DONE) {
       if (hitAPI.status === 200) {
         let result = JSON.parse(hitAPI.responseText);
-        $('#back-button').html(`<button onClick="showFolders()">Go Back</button>`);
+        $('#back-button').html(`<button onClick="showFolders()">Back to Folders</button>`);
         $('#main-folder-display').append(`
           <button onClick="sortByPopularity('ascending', '${folderTitle}')">Sort by Popularity--Ascending</button>
           <button onClick="sortByPopularity('descending', '${folderTitle}')">Sort by Popularity--Descending</button>
